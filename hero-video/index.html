@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KHANZ Smooth Scroll Video</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Syne:wght@700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="./sections.css" />
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        montserrat: ['Montserrat', 'sans-serif'],
+                        jakarta: ['Plus Jakarta Sans', 'sans-serif'],
+                        syne: ['Syne', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #000;
+        }
+
+        body {
+            /* Removed fixed height to allow natural flow after wrapper */
+        }
+
+        .hero-scroll-wrapper {
+            position: relative;
+            height: 500vh;
+        }
+
+        .hero-sticky {
+            position: sticky;
+            top: 0;
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
+            z-index: 0;
+        }
+
+        canvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Fade in animation class */
+        .fade-in-section {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+            will-change: opacity, transform;
+        }
+
+        .fade-in-section.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+
+<body class="text-white relative">
+
+    <!-- Hero Scroll Wrapper -->
+    <section class="hero-scroll-wrapper" id="hero-scroll-wrapper">
+        <!-- Sticky Video Canvas -->
+        <div class="hero-sticky">
+            <canvas id="hero-lightpass"></canvas>
+        </div>
+
+        <!-- UI Overlay Layer -->
+        <div class="w-full absolute top-0 left-0 z-10 flex flex-col">
+
+            <!-- NAVBAR (Fixed at Top) -->
+            <header id="main-navbar" class="fixed top-0 w-full bg-transparent z-50 transition-all duration-300">
+                <div class="w-full px-6 sm:px-10 lg:px-12">
+                    <div class="flex items-center justify-between h-20 sm:h-24">
+                        <!-- Logo on Left -->
+                        <div class="flex-shrink-0 flex items-center">
+                            <a href="#home" id="navbar-logo" aria-label="KHANZ Group of Companies Logo">
+                                <img src="./logo.png" alt="KHANZ Logo"
+                                    class="h-10 sm:h-12 md:h-14 w-auto object-contain drop-shadow-sm" />
+                            </a>
+                        </div>
+
+                        <!-- Navigation Links on Right -->
+                        <nav id="navbar-links-desktop" class="hidden md:flex items-center space-x-8 lg:space-x-10"
+                            aria-label="Navbar Navigation">
+                            <a href="#home"
+                                class="text-white hover:text-gray-200 text-base lg:text-lg font-semibold tracking-wide transition-colors duration-200 py-6">Home</a>
+                            <a href="#about"
+                                class="text-white hover:text-gray-200 text-base lg:text-lg font-semibold tracking-wide transition-colors duration-200 py-6">About
+                                Us</a>
+
+                            <!-- Dropdown wrapper -->
+                            <div class="relative group">
+                                <a href="#businesses"
+                                    class="text-white hover:text-gray-200 text-base lg:text-lg font-semibold tracking-wide transition-colors duration-200 py-6 inline-flex items-center gap-1">Our
+                                    Businesses
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        class="text-yellow-500 transition-transform duration-300 group-hover:rotate-180">
+                                        <polyline points="6 9 12 15 18 9"></polyline>
+                                    </svg>
+                                </a>
+                                <!-- Dropdown Menu -->
+                                <div
+                                    class="absolute top-full left-0 mt-0 w-64 bg-black/95 backdrop-blur-md border border-yellow-500/20 border-l-4 border-l-yellow-500 rounded-b-md shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform origin-top -translate-y-2 group-hover:translate-y-0 z-50 overflow-hidden">
+                                    <ul class="py-2">
+                                        <li><a href="http://localhost:5173/divisions/voyant-eye"
+                                                class="block px-5 py-2.5 text-sm text-white hover:text-yellow-400 hover:bg-white/5 transition-colors duration-200">Voyant
+                                                Eye</a></li>
+                                        <li><a href="/divisions/crypfo.html"
+                                                class="block px-5 py-2.5 text-sm text-white hover:text-yellow-400 hover:bg-white/5 transition-colors duration-200">Crypfo</a>
+                                        </li>
+                                        <li><a href="http://localhost:5173/divisions/thats-it"
+                                                class="block px-5 py-2.5 text-sm text-white hover:text-yellow-400 hover:bg-white/5 transition-colors duration-200">That's
+                                                It</a></li>
+                                        <li><a href="http://localhost:5173/divisions/minal"
+                                                class="block px-5 py-2.5 text-sm text-white hover:text-yellow-400 hover:bg-white/5 transition-colors duration-200">Minal
+                                                Collection</a></li>
+                                        <li><a href="#" onclick="event.preventDefault()"
+                                                class="block px-5 py-2.5 text-sm text-white/60 cursor-not-allowed transition-colors duration-200">Kash
+                                                Medical Complex</a></li>
+                                        <li><a href="#" onclick="event.preventDefault()"
+                                                class="block px-5 py-2.5 text-sm text-white/60 cursor-not-allowed transition-colors duration-200">Food
+                                                Business</a></li>
+                                        <li><a href="#" onclick="event.preventDefault()"
+                                                class="block px-5 py-2.5 text-sm text-white/60 cursor-not-allowed transition-colors duration-200">Khanz
+                                                Housing Society</a></li>
+                                        <li><a href="http://localhost:5173/divisions/kash-electronics"
+                                                class="block px-5 py-2.5 text-sm text-white hover:text-yellow-400 hover:bg-white/5 transition-colors duration-200">Kash
+                                                Electronics</a></li>
+                                        <li><a href="http://localhost:5173/divisions/khanz-motors"
+                                                class="block px-5 py-2.5 text-sm text-white hover:text-yellow-400 hover:bg-white/5 transition-colors duration-200">Khanz
+                                                Motors</a></li>
+                                        <li><span
+                                                class="block px-5 py-2.5 text-sm text-gray-400 italic pointer-events-none">Coming
+                                                Soon...</span></li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <a href="#contact"
+                                class="text-white hover:text-gray-200 text-base lg:text-lg font-semibold tracking-wide transition-colors duration-200 py-6">Contact</a>
+                        </nav>
+
+                        <!-- Mobile Menu Button -->
+                        <div class="flex md:hidden items-center">
+                            <button id="navbar-mobile-toggle" type="button"
+                                class="p-2 text-white hover:text-gray-200 focus:outline-none" aria-label="Toggle menu"
+                                onclick="document.getElementById('navbar-mobile-menu').classList.toggle('hidden')">
+                                <!-- Menu SVG -->
+                                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <line x1="4" x2="20" y1="12" y2="12" />
+                                    <line x1="4" x2="20" y1="6" y2="6" />
+                                    <line x1="4" x2="20" y1="18" y2="18" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Mobile Menu Dropdown -->
+                <div id="navbar-mobile-menu"
+                    class="hidden md:hidden px-6 pt-2 pb-6 space-y-3 bg-black/80 backdrop-blur-md">
+                    <a href="#home" class="block text-white hover:text-gray-200 text-lg font-semibold py-2">Home</a>
+                    <a href="#about" class="block text-white hover:text-gray-200 text-lg font-semibold py-2">About
+                        Us</a>
+
+                    <div>
+                        <a href="#businesses"
+                            class="block text-white hover:text-gray-200 text-lg font-semibold py-2">Our
+                            Businesses</a>
+                        <div class="pl-4 mt-2 space-y-2 border-l-2 border-yellow-500/50">
+                            <a href="#" onclick="event.preventDefault()"
+                                class="block text-sm text-gray-200/50 cursor-not-allowed py-1 transition-colors">Voyant
+                                Eye</a>
+                            <a href="/divisions/crypfo.html"
+                                class="block text-sm text-gray-200 hover:text-yellow-400 py-1 transition-colors">Crypfo</a>
+                            <a href="http://localhost:5173/divisions/thats-it"
+                                class="block text-sm text-gray-200 hover:text-yellow-400 py-1 transition-colors">That's
+                                It</a>
+                            <a href="http://localhost:5173/divisions/minal"
+                                class="block text-sm text-gray-200 hover:text-yellow-400 py-1 transition-colors">Minal
+                                Collection</a>
+                            <a href="#" onclick="event.preventDefault()"
+                                class="block text-sm text-gray-200/50 cursor-not-allowed py-1 transition-colors">Kash
+                                Medical Complex</a>
+                            <a href="#" onclick="event.preventDefault()"
+                                class="block text-sm text-gray-200/50 cursor-not-allowed py-1 transition-colors">Food
+                                Business</a>
+                            <a href="#" onclick="event.preventDefault()"
+                                class="block text-sm text-gray-200/50 cursor-not-allowed py-1 transition-colors">Khanz
+                                Housing Society</a>
+                            <a href="http://localhost:5173/divisions/kash-electronics"
+                                class="block text-sm text-gray-200 hover:text-yellow-400 py-1 transition-colors">Kash
+                                Electronics</a>
+                            <a href="http://localhost:5173/divisions/khanz-motors"
+                                class="block text-sm text-gray-200 hover:text-yellow-400 py-1 transition-colors">Khanz
+                                Motors</a>
+                            <span class="block text-sm text-gray-400 italic py-1">Coming Soon...</span>
+                        </div>
+                    </div>
+
+                    <a href="#contact"
+                        class="block text-white hover:text-gray-200 text-lg font-semibold py-2">Contact</a>
+                </div>
+            </header>
+
+            <!-- Spacer for the first scroll phase (Video plays alone) -->
+            <div style="height: 120vh;"></div>
+
+            <!-- ABOUT US SECTION -->
+            <section id="about-us-banner-section"
+                class="fade-in-section relative w-full py-20 flex items-center justify-center select-none bg-transparent">
+                <!-- Background overlays removed to let video shine through, added subtle gradient for text readability -->
+                <div class="absolute inset-0 bg-gradient-to-r from-black/80 via-black/50 to-transparent -z-10"></div>
+
+                <div class="relative z-10 w-full max-w-7xl mx-auto px-6 sm:px-12 lg:px-20 py-12">
+                    <div class="max-w-2xl lg:max-w-3xl">
+                        <!-- Top Label with Left Framing Line -->
+                        <div class="relative flex items-center mb-1 sm:mb-2">
+                            <div class="w-12 sm:w-16 h-[1.5px] bg-gradient-to-r from-amber-400/80 to-amber-300/60 mr-4">
+                            </div>
+                            <span
+                                class="text-[11px] sm:text-xs md:text-sm font-semibold tracking-[0.32em] uppercase text-amber-300 drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)] font-montserrat">
+                                ABOUT KHANZ
+                            </span>
+                            <div
+                                class="absolute left-0 top-[0.45rem] w-[1.5px] h-[5.5rem] sm:h-[7.5rem] md:h-[9.5rem] lg:h-[11rem] bg-gradient-to-b from-amber-400/80 via-amber-400/40 to-transparent pointer-events-none">
+                            </div>
+                        </div>
+
+                        <!-- Main Heading -->
+                        <h1
+                            class="text-6xl sm:text-7xl md:text-8xl lg:text-[7.2rem] font-extrabold tracking-tight text-white leading-none pl-3 sm:pl-4 my-2 sm:my-3 drop-shadow-[0_6px_30px_rgba(0,0,0,0.95)] select-text font-syne">
+                            ABOUT US
+                        </h1>
+
+                        <!-- Paragraph -->
+                        <p
+                            class="pl-3 sm:pl-4 mt-4 sm:mt-6 text-xs sm:text-sm md:text-[15px] lg:text-base text-gray-200/90 font-normal leading-relaxed md:leading-[1.75] max-w-xl sm:max-w-2xl tracking-normal drop-shadow-[0_2px_12px_rgba(0,0,0,0.9)] select-text font-jakarta">
+                            KHANZ Group of Companies is a diversified business group bringing together ventures across
+                            multiple industries. From marketing and finance to fashion, healthcare, food, real estate,
+                            technology and mobility, we are building businesses with one shared vision — creating value,
+                            opportunities and a stronger future.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Spacer for video scroll -->
+            <div style="height: 120vh;"></div>
+
+            <!-- GLASS CARD SECTION -->
+            <section id="glass-card-section"
+                class="fade-in-section relative w-full py-20 px-4 sm:px-6 flex items-center justify-center bg-transparent">
+                <!-- Removed background light per request -->
+
+                <!-- Glass Card Container -->
+                <div
+                    class="relative w-full max-w-[600px] sm:max-w-[650px] min-h-[400px] sm:min-h-[450px] rounded-[24px] sm:rounded-[28px] p-8 sm:p-10 flex flex-col justify-between select-none bg-white/[0.07] backdrop-blur-[36px] backdrop-saturate-[180%] border border-white/20 shadow-[0_20px_50px_rgba(0,0,0,0.5),inset_0_1px_1px_rgba(255,255,255,0.35)]">
+
+                    <!-- Top Row -->
+                    <div
+                        class="flex items-center justify-between w-full text-white/85 text-xs sm:text-sm font-medium tracking-wide mb-5 sm:mb-6">
+                        <span>Pure Glass</span>
+                        <div class="flex items-center gap-1.5 cursor-pointer hover:text-white transition-colors">
+                            <!-- ArrowRight SVG -->
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                                <polyline points="12 5 19 12 12 19"></polyline>
+                            </svg>
+                            <span>Support</span>
+                        </div>
+                    </div>
+
+                    <!-- Center Content -->
+                    <div class="mb-5 sm:mb-6">
+                        <h2
+                            class="text-2xl sm:text-3xl md:text-[2.25rem] font-bold text-white tracking-tight leading-[1.08] drop-shadow-[0_2px_10px_rgba(0,0,0,0.4)] font-montserrat">
+                            MASTER<br />EVERY LAYER
+                        </h2>
+                        <p
+                            class="mt-2.5 sm:mt-3 text-xs sm:text-[13px] text-white/80 font-normal leading-relaxed max-w-[280px] sm:max-w-[320px] font-jakarta">
+                            Crisp, professional, versatile aesthetics designed for 4K resolution.
+                        </p>
+                    </div>
+
+                    <!-- Bottom Row -->
+                    <div class="flex items-center justify-between w-full pt-1">
+                        <div
+                            class="px-3.5 py-1 rounded-full border border-white/35 bg-white/[0.04] text-white/90 text-xs font-normal tracking-wide backdrop-blur-sm shadow-sm font-jakarta">
+                            Editable Layer
+                        </div>
+                        <span class="text-white/80 text-xs font-normal tracking-wide font-jakarta">
+                            2500×3200 Pixel
+                        </span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Final spacer -->
+            <div style="height: 100vh;"></div>
+        </div>
+    </section>
+
+    <!-- REFERENCE SECTION 02: White numbered selection, central circular image, spare content -->
+    <section class="division-scroll" id="divisions" aria-label="Explore ten flagship divisions">
+        <div class="division-sticky">
+            <div class="division-layout">
+                <header class="editorial-nav">
+                    <div class="editorial-nav-left"></div>
+                    <a class="editorial-brand" style="font-size: 24px; font-weight: 800;" href="#home"
+                        aria-label="Our Divisions">OUR<span
+                            style="font-size: 14px; font-weight: 700; margin-top: 8px;">DIVISIONS</span></a>
+                    <div class="editorial-nav-right"></div>
+                </header>
+                <div class="division-workspace">
+                    <div class="division-numbers" aria-label="Select a division" id="divisionNumbers"></div>
+                    <figure class="division-orbit" aria-label="Photograph representing the selected KHANZ division">
+                        <div class="division-photo" id="divisionPhoto">
+                            <img id="imgLayer0" class="wipe-layer" src="" alt="" />
+                            <img id="imgLayer1" class="wipe-layer wipe-dark" src="" alt="" />
+                            <img id="imgLayer2" class="wipe-layer wipe-bright" src="" alt="" />
+                        </div>
+                    </figure>
+                    <div class="division-content" aria-live="polite">
+                        <p class="division-kicker" id="divisionKicker">01 / 10 · OUR DIVISIONS</p>
+                        <h2 id="divisionTitle">Mobility &amp;<br />Logistics</h2>
+                        <p class="division-location" id="divisionLocation">Premium mobility · Saudi Arabia</p>
+                        <p class="division-description" id="divisionDescription">Premium rental fleet, VIP transport and
+                            commercial car hire.</p>
+                        <a href="#" class="division-explore-btn" id="divisionExploreBtn">EXPLORE DIVISION
+                            <span>↗</span></a>
+                    </div>
+                </div>
+                <div class="division-scroll-cue" aria-hidden="true">SCROLL TO EXPLORE <span>↓</span></div>
+            </div>
+        </div>
+
+        <!-- Division Modal -->
+        <div class="division-modal" id="divisionModal" role="dialog" aria-modal="true"
+            aria-labelledby="divisionModalTitle">
+            <div class="division-modal-content">
+                <button class="division-modal-close" id="divisionModalClose" aria-label="Close modal">✕</button>
+                <img class="division-modal-image" id="divisionModalImage" src="" alt="Division visual" />
+                <div class="division-modal-body">
+                    <p class="division-modal-kicker" id="divisionModalKicker">CATEGORY</p>
+                    <h3 class="division-modal-title" id="divisionModalTitle">Division Title</h3>
+                    <p class="division-modal-desc" id="divisionModalDesc">Description</p>
+                    <div class="division-modal-coming-soon" id="divisionModalComingSoon" style="display: none;">Coming
+                        Soon</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- REFERENCE SECTION 03: Full-bleed architectural image, thin grid, interactive white tile -->
+    <section class="experience" id="ksa-experience" aria-label="KHANZ connected platform">
+        <div class="experience-image" role="img"
+            aria-label="Illustrative modern architecture representing KHANZ interests"></div>
+        <div class="experience-shade"></div>
+        <div class="experience-inner">
+            <nav class="experience-header" aria-label="Experience section navigation">
+                <div class="experience-header-left"><a href="#divisions">Divisions</a><a href="#about">Why KHANZ</a>
+                </div>
+                <span class="experience-header-brand">KHANZ Group of Companies</span>
+                <a class="experience-header-link" href="#contact">Contact <span>↗</span></a>
+            </nav>
+            <div class="experience-grid">
+                <div class="experience-top-left"><span>01 — THE KHANZ ECOSYSTEM</span></div>
+                <div class="experience-top-middle"><span>Eight divisions, one platform.</span></div>
+                <div class="experience-top-right"><span>SAUDI ARABIA · VISION 2030</span></div>
+                <div class="experience-story">
+                    <p class="experience-overline">THE WAY WE WORK</p>
+                    <h2>A connected approach<br />to opportunity.</h2>
+                    <p>From market entry to real estate, mobility and digital solutions — our specialist divisions work
+                        together across the Kingdom.</p>
+                    <div class="experience-ctas"><a class="btn-light" href="#divisions">Explore divisions</a><a
+                            class="btn-outline" href="#contact">Contact us</a></div>
+                </div>
+                <button class="experience-tile" data-tile="business"><span>Marketing &amp; Finance</span><span
+                        class="experience-tile-hint">Select to explore</span><span class="tile-circle">details
+                        <span>↘</span></span></button>
+                <button class="experience-tile" data-tile="mobility"><span>Mobility &amp; Logistics</span><span
+                        class="experience-tile-hint">Explore the division</span><span class="tile-circle">details
+                        <span>↘</span></span></button>
+                <button class="experience-tile" data-tile="realestate"><span>Real Estate &amp; Advisory</span><span
+                        class="experience-tile-hint">Explore the division</span><span class="tile-circle">details
+                        <span>↘</span></span></button>
+                <button class="experience-tile is-active" data-tile="digital" aria-pressed="true"><span>Technology &amp;
+                        AI</span><span class="experience-tile-hint">Explore the division</span><span
+                        class="tile-circle">details <span>↘</span></span></button>
+                <button class="experience-tile" data-tile="hospitality"><span>Food &amp; Beverage</span><span
+                        class="experience-tile-hint">Explore the division</span><span class="tile-circle">details
+                        <span>↘</span></span></button>
+            </div>
+            <div class="experience-detail" id="experienceDetail" hidden role="dialog" aria-modal="true"
+                aria-labelledby="experienceDetailTitle">
+                <div class="detail-backdrop" data-close-detail="true"></div>
+                <div class="detail-content" tabindex="-1"><button class="detail-close" type="button" id="detailClose"
+                        aria-label="Close">✕</button>
+                    <p id="experienceDetailNumber">KHANZ / 08</p>
+                    <h3 id="experienceDetailTitle">Technology &amp; AI</h3>
+                    <p id="experienceDetailCopy">Enterprise software, intelligent automation, CRM and digital growth
+                        services.</p><a id="experienceDetailLink" href="#technology">Explore division ↗</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Scroll Animation and Intersection Observer Script -->
+    <script>
+        // --- 1. Canvas Video Frame Logic ---
+        const canvas = document.getElementById("hero-lightpass");
+        const context = canvas.getContext("2d");
+
+        const frameCount = 319;
+        const currentFrame = i => `./frames/${(i + 1).toString().padStart(5, "0")}.png`;
+
+        const images = [];
+        let currentIndex = 0;
+
+        for (let i = 0; i < frameCount; i++) {
+            const img = new Image();
+            img.src = currentFrame(i);
+            img.onload = () => {
+                if (i === currentIndex) render();
+            };
+            images.push(img);
+        }
+
+        function resize() {
+            const dpr = window.devicePixelRatio || 1;
+            canvas.width = window.innerWidth * dpr;
+            canvas.height = window.innerHeight * dpr;
+            render();
+        }
+
+        function render() {
+            const img = images[currentIndex];
+            if (!img || !img.complete || img.naturalWidth === 0) return;
+
+            const cw = canvas.width;
+            const ch = canvas.height;
+
+            const scale = Math.max(cw / img.naturalWidth, ch / img.naturalHeight);
+            const w = img.naturalWidth * scale;
+            const h = img.naturalHeight * scale;
+            const x = (cw - w) / 2;
+            const y = (ch - h) / 2;
+
+            context.clearRect(0, 0, cw, ch);
+            context.drawImage(img, x, y, w, h);
+        }
+
+        const wrapper = document.getElementById("hero-scroll-wrapper");
+        let ticking = false;
+        window.addEventListener("scroll", () => {
+            const rect = wrapper.getBoundingClientRect();
+            const travel = wrapper.offsetHeight - window.innerHeight;
+
+            let scrolled = -rect.top;
+            if (scrolled < 0) scrolled = 0;
+            if (scrolled > travel) scrolled = travel;
+
+            const fraction = travel > 0 ? scrolled / travel : 0;
+
+            currentIndex = Math.min(frameCount - 1, Math.floor(fraction * frameCount));
+
+            if (!ticking) {
+                ticking = true;
+                requestAnimationFrame(() => {
+                    render();
+                    ticking = false;
+                });
+            }
+        });
+
+        window.addEventListener("resize", resize);
+        resize();
+
+        // --- 2. Intersection Observer for Fade-in Sections ---
+        document.addEventListener("DOMContentLoaded", () => {
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.3 // Trigger when 30% of the section is visible
+            };
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                        // Optional: Unobserve after it becomes visible once
+                        // observer.unobserve(entry.target);
+                    } else {
+                        // Remove class if you want it to fade out when scrolling away
+                        entry.target.classList.remove('is-visible');
+                    }
+                });
+            }, observerOptions);
+
+            const sections = document.querySelectorAll('.fade-in-section');
+            sections.forEach(section => {
+                observer.observe(section);
+            });
+        });
+    </script>
+    <script src="./sections.js"></script>
+</body>
+
+</html>

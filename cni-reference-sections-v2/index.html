@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#ffffff" />
+  <meta name="description" content="Crescent Nova International's flagship divisions and Saudi opportunity — two interactive sections adapted from the supplied visual reference." />
+  <title>CNI — Two Reference Sections</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;450;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="./styles.css" />
+  <script src="./script.js" defer></script>
+</head>
+<body>
+  <main>
+    <!-- REFERENCE SECTION 02: White numbered selection, central circular image, spare content -->
+    <section class="division-scroll" id="divisions" aria-label="Explore eight flagship divisions">
+      <div class="division-sticky">
+        <div class="division-layout">
+          <header class="editorial-nav">
+            <div class="editorial-nav-left"><a href="#divisions">Divisions</a><a href="#ksa-experience">Opportunity</a></div>
+            <a class="editorial-brand" href="https://crescentnovainternational.com/" aria-label="Crescent Nova International home">Crescent Nova<span>International</span></a>
+            <div class="editorial-nav-right"><a class="round-icon" aria-label="Contact CNI" href="https://crescentnovainternational.com/contact">↗</a><span class="round-icon decorative" aria-hidden="true">✳</span></div>
+          </header>
+          <div class="division-workspace">
+            <div class="division-numbers" aria-label="Select a division" id="divisionNumbers"></div>
+            <figure class="division-orbit" aria-label="Photograph representing the selected CNI division">
+              <div class="division-photo" id="divisionPhoto">
+                <img id="divisionImage" src="https://crescentnovainternational.com/divisions/automotive.webp" alt="Automotive division visual" />
+              </div>
+              <span class="orbit-pin" aria-hidden="true"></span>
+              <span class="orbit-line" aria-hidden="true"></span>
+            </figure>
+            <div class="division-content" aria-live="polite">
+              <p class="division-kicker" id="divisionKicker">01 / 08 · OUR DIVISIONS</p>
+              <h2 id="divisionTitle">Automotive<br />Division</h2>
+              <p class="division-location" id="divisionLocation">Premium mobility · Kingdom of Saudi Arabia</p>
+              <p class="division-description" id="divisionDescription">Premium rental fleet, VIP transport and commercial car hire.</p>
+            </div>
+          </div>
+          <footer class="division-footbar">
+            <span class="foot-label">Eight flagship divisions</span>
+            <span class="foot-location"><span id="divisionPlace">RIYADH · SAUDI ARABIA</span><span class="foot-location-line"></span></span>
+            <a class="black-link" id="divisionLink" href="https://crescentnovainternational.com/divisions#automotive">Explore division <span aria-hidden="true">↗</span></a>
+          </footer>
+          <div class="division-scroll-cue" aria-hidden="true">SCROLL TO EXPLORE <span>↓</span></div>
+        </div>
+      </div>
+    </section>
+    <!-- REFERENCE SECTION 03: Full-bleed architectural image, thin grid, interactive white tile -->
+    <section class="experience" id="ksa-experience" aria-label="CNI connected platform">
+      <div class="experience-image" role="img" aria-label="Illustrative modern architecture representing CNI's Saudi real estate interests"></div>
+      <div class="experience-shade"></div>
+      <div class="experience-inner">
+        <nav class="experience-header" aria-label="Experience section navigation">
+          <div class="experience-header-left"><a href="#divisions">Divisions</a><a href="https://crescentnovainternational.com/why-ksa">Why KSA</a></div>
+          <span class="experience-header-brand">Crescent Nova International</span>
+          <a class="experience-header-link" href="https://crescentnovainternational.com/contact">Contact <span>↗</span></a>
+        </nav>
+        <div class="experience-grid">
+          <div class="experience-top-left"><span>01 — THE CNI ECOSYSTEM</span></div>
+          <div class="experience-top-middle"><span>Eight divisions, one platform.</span></div>
+          <div class="experience-top-right"><span>SAUDI ARABIA · VISION 2030</span></div>
+          <div class="experience-story">
+            <p class="experience-overline">THE WAY WE WORK</p>
+            <h2>A connected approach<br />to opportunity.</h2>
+            <p>From market entry to real estate, mobility and digital solutions — our specialist divisions work together across the Kingdom.</p>
+            <div class="experience-ctas"><a class="btn-light" href="https://crescentnovainternational.com/divisions">Explore divisions</a><a class="btn-outline" href="https://crescentnovainternational.com/contact">Contact us</a></div>
+          </div>
+          <button class="experience-tile" data-tile="business"><span>Business facilitation</span><span class="experience-tile-hint">Select to explore</span><span class="tile-circle">details <span>↘</span></span></button>
+          <button class="experience-tile" data-tile="mobility"><span>Premium mobility</span><span class="experience-tile-hint">Explore the division</span><span class="tile-circle">details <span>↘</span></span></button>
+          <button class="experience-tile" data-tile="realestate"><span>Real estate &amp; advisory</span><span class="experience-tile-hint">Explore the division</span><span class="tile-circle">details <span>↘</span></span></button>
+          <button class="experience-tile is-active" data-tile="digital" aria-pressed="true"><span>AI &amp; Digital</span><span class="experience-tile-hint">Explore the division</span><span class="tile-circle">details <span>↘</span></span></button>
+          <button class="experience-tile" data-tile="hospitality"><span>Hospitality &amp; travel</span><span class="experience-tile-hint">Explore the division</span><span class="tile-circle">details <span>↘</span></span></button>
+        </div>
+        <div class="experience-detail" id="experienceDetail" hidden role="dialog" aria-modal="true" aria-labelledby="experienceDetailTitle">
+          <div class="detail-backdrop" data-close-detail="true"></div>
+          <div class="detail-content" tabindex="-1"><button class="detail-close" type="button" id="detailClose" aria-label="Close">✕</button><p id="experienceDetailNumber">CNI / 08</p><h3 id="experienceDetailTitle">AI &amp; Digital</h3><p id="experienceDetailCopy">Intelligent automation, enterprise software, CRM and digital growth services.</p><a id="experienceDetailLink" href="https://crescentnovainternational.com/divisions#ai-digital">Explore division ↗</a></div>
+        </div>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
